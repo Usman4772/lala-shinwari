@@ -1,0 +1,257 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #0b0b0b;
+  --color-ink-soft: #151515;
+  --color-ink-muted: #1f1f1f;
+  --color-gold: #c9a24a;
+  --color-gold-light: #e3c171;
+  --color-gold-dark: #a8853a;
+  --color-gold-deep: #85661f; /* gold for small text on light backgrounds (WCAG AA) */
+  --color-cream: #f7f1e3;
+  --color-cream-dark: #ede4cf;
+  --color-accent: #b3261e;
+  --color-whatsapp: #25d366;
+
+  --font-heading: var(--font-marcellus), "Times New Roman", serif;
+  --font-accent: var(--font-cormorant), Georgia, serif;
+  --font-sans: var(--font-outfit), system-ui, sans-serif;
+
+  --shadow-gold: 0 10px 40px -10px rgba(201, 162, 74, 0.45);
+  --shadow-card: 0 12px 40px -14px rgba(11, 11, 11, 0.35);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+body {
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Heading font ships a single weight — never let the browser fake a bold. */
+.font-heading {
+  font-synthesis-weight: none;
+  letter-spacing: 0.01em;
+}
+
+/* Highlighted words inside headings switch to the flowing italic accent face. */
+.font-heading .italic,
+.font-heading.italic {
+  font-family: var(--font-accent);
+  font-weight: 600;
+  font-size: 1.12em;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+/* Buttons: soft lift + a light sweep on hover */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+.btn-shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.45) 50%, transparent 65%);
+  transform: translateX(-120%);
+  transition: transform 0.7s ease;
+  pointer-events: none;
+}
+.btn-shine:hover::after {
+  transform: translateX(120%);
+}
+
+/* Hero entrance — pure CSS so the headline (LCP) never waits for JS. Delays are set inline. */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-in {
+    opacity: 0;
+    animation: hero-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .hero-fade {
+    opacity: 0;
+    animation: hero-fade 0.8s ease-out both;
+  }
+  .hero-word {
+    transform: translateY(110%) rotate(4deg);
+    animation: hero-word 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .hero-rule {
+    transform: scaleX(0);
+    animation: hero-rule 0.8s cubic-bezier(0.65, 0, 0.35, 1) both;
+  }
+  .hero-zoom {
+    animation: hero-zoom 1.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+}
+@keyframes hero-in {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes hero-fade {
+  /* uses `transform`; Tailwind's -translate-x-1/2 lives on the separate `translate` property */
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes hero-word {
+  from { transform: translateY(110%) rotate(4deg); }
+  to { transform: translateY(0) rotate(0); }
+}
+@keyframes hero-rule {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+@keyframes hero-zoom {
+  from { transform: scale(1.15); }
+  to { transform: scale(1); }
+}
+
+/* Hero "discover" indicator */
+@keyframes scroll-hint {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(300%); }
+}
+.scroll-hint {
+  animation: scroll-hint 1.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* Continuous marquee ribbon */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 40s linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* Card hover: lift + deeper shadow */
+.card-lift {
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.45s ease;
+}
+.card-lift:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 50px -20px rgba(11, 11, 11, 0.45);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-hint,
+  .marquee-track {
+    animation: none;
+  }
+  .btn-shine::after {
+    display: none;
+  }
+}
+
+/* Gold gradient text */
+.text-gold-gradient {
+  background: linear-gradient(120deg, #a8853a 0%, #e3c171 45%, #c9a24a 70%, #f1dca0 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Gold ornamental divider */
+.gold-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.gold-divider::before,
+.gold-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
+}
+
+/* Subtle pattern for dark sections */
+.bg-royal {
+  background-color: var(--color-ink);
+  background-image:
+    radial-gradient(circle at 20% 0%, rgba(201, 162, 74, 0.12), transparent 40%),
+    radial-gradient(circle at 80% 100%, rgba(201, 162, 74, 0.08), transparent 40%);
+}
+
+/* Scrollbar-less horizontal scroll for tabs */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* GSAP reveal: hidden until animated (a <noscript> rule in layout.tsx restores visibility without JS). */
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal] {
+    opacity: 0;
+  }
+}
+
+/* Masonry columns */
+.masonry {
+  column-count: 2;
+  column-gap: 0.75rem;
+}
+@media (min-width: 768px) {
+  .masonry {
+    column-count: 3;
+    column-gap: 1rem;
+  }
+}
+@media (min-width: 1280px) {
+  .masonry {
+    column-count: 4;
+  }
+}
+.masonry > * {
+  break-inside: avoid;
+  margin-bottom: 0.75rem;
+}
+@media (min-width: 768px) {
+  .masonry > * {
+    margin-bottom: 1rem;
+  }
+}
+
+/* Form controls — in the components layer so Tailwind utilities (pl-10, h-11…) can override them */
+@layer components {
+  .input {
+    width: 100%;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(11, 11, 11, 0.12);
+    background: #fff;
+    padding: 0.8rem 1rem;
+    font-size: 0.95rem;
+    color: var(--color-ink);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .input:focus {
+    border-color: var(--color-gold);
+    box-shadow: 0 0 0 3px rgba(201, 162, 74, 0.25);
+  }
+  .input::placeholder {
+    color: rgba(11, 11, 11, 0.4);
+  }
+  .label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: rgba(11, 11, 11, 0.65);
+  }
+}
